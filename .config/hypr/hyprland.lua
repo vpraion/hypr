@@ -106,7 +106,7 @@ hl.config({
         resize_on_border = false,
 
         -- Please see https://wiki.hypr.land/configuring/extra/tearing/ before you turn this on
-        allow_tearing = false,
+        allow_tearing = true,
 
         layout = "dwindle",
     },
@@ -214,6 +214,9 @@ hl.config({
     misc = {
         force_default_wallpaper = -1,    -- Set to 0 or 1 to disable the anime mascot wallpapers
         disable_hyprland_logo   = false, -- If true disables the random hyprland logo / anime girl background. :(
+        -- Enable VRR for all fullscreen windows (vrr in monitor config alone doesn't activate it,
+        -- and XWayland games report contentType = none so vrr = 3 won't trigger).
+        vrr                     = 2,
     },
 })
 
