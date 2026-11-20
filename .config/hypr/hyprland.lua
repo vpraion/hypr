@@ -37,7 +37,7 @@ hl.monitor(
 local terminal = "kitty"
 local fileManager = "dolphin"
 local menu = "hyprlauncher"
-
+local wpManager = "hyprpaper"
 
 -------------------
 ---- AUTOSTART ----
@@ -50,6 +50,7 @@ local menu = "hyprlauncher"
 --
 hl.on("hyprland.start", function () 
   hl.exec_cmd(terminal)
+  hl.exec_cmd(wpManager)
 --   hl.exec_cmd("nm-applet")
 --   hl.exec_cmd("waybar & hyprpaper & firefox")
 end)
@@ -370,3 +371,4 @@ hl.window_rule({
     move  = "20 monitor_h-120",
     float = true,
 })
+
