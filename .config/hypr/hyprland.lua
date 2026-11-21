@@ -37,7 +37,8 @@ hl.monitor(
 local terminal = "kitty"
 local fileManager = "dolphin"
 local menu = "hyprlauncher"
-local wpManager = "hyprpaper"
+local hyprpaper = "hyprpaper"
+local waybar = "waybar"
 
 -------------------
 ---- AUTOSTART ----
@@ -49,8 +50,8 @@ local wpManager = "hyprpaper"
 -- Or execute your favorite apps at launch like this:
 --
 hl.on("hyprland.start", function () 
-  hl.exec_cmd(terminal)
-  hl.exec_cmd(wpManager)
+  hl.exec_cmd(hyprpaper)
+  hl.exec_cmd(waybar)
 --   hl.exec_cmd("nm-applet")
 --   hl.exec_cmd("waybar & hyprpaper & firefox")
 end)
@@ -217,6 +218,7 @@ hl.config({
         -- Enable VRR for all fullscreen windows (vrr in monitor config alone doesn't activate it,
         -- and XWayland games report contentType = none so vrr = 3 won't trigger).
         vrr                     = 2,
+        disable_splash_rendering = true,
     },
 })
 

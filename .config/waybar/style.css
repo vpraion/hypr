@@ -1,0 +1,277 @@
+/* ============================================================================
+ * Waybar Stylesheet — Floating Islands + Drawers (Tokyo Night)
+ * Docs: https://github.com/Alexays/Waybar/wiki/Styling
+ * ============================================================================ */
+
+/* ── Tokyo Night Color Palette ─────────────────────────────────────────────
+ * Edit these variables to re-theme the entire bar in one place.
+ * -------------------------------------------------------------------------- */
+@define-color bg          #1a1b26; /* Deep night background */
+@define-color surface     #24283b; /* Floating pill background */
+@define-color surface-alt #2f3549; /* Hover / subtle highlight */
+@define-color border      #414868; /* Pill outline */
+@define-color fg          #c0caf5; /* Primary text */
+@define-color muted       #565f89; /* Inactive / secondary text */
+
+@define-color blue        #7aa2f7;
+@define-color cyan        #7dcfff;
+@define-color purple      #bb9af7;
+@define-color green       #9ece6a;
+@define-color yellow      #e0af68;
+@define-color orange      #ff9e64;
+@define-color red         #f7768e;
+
+/* ── Global Reset & Font ─────────────────────────────────────────────────── */
+/* JetBrains Mono for crisp text + Nerd Font Propo for full-size icons */
+* {
+  font-family: "JetBrains Mono", "MesloLGL Nerd Font Propo", "FantasqueSansM Nerd Font Propo", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 0;
+}
+
+/* Transparent outer bar so only the floating islands are visible */
+window#waybar {
+  background-color: transparent;
+  color: @fg;
+}
+
+/* ── Shared Floating Island Styling ──────────────────────────────────────── */
+#workspaces,
+#submap,
+#window,
+#mpris,
+#clock,
+#hardware,
+#connectivity,
+#utilities,
+#tray {
+  background-color: alpha(@surface, 0.92);
+  border: 1px solid @border;
+  border-radius: 14px;
+  padding: 2px 12px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Subtle border glow on hover */
+#window:hover,
+#mpris:hover,
+#clock:hover,
+#hardware:hover,
+#connectivity:hover,
+#utilities:hover,
+#tray:hover {
+  border-color: alpha(@blue, 0.75);
+}
+
+/* ── Workspaces Island ───────────────────────────────────────────────────── */
+#workspaces {
+  padding: 0 6px;
+}
+
+#workspaces button {
+  color: @muted;
+  background-color: transparent;
+  border-radius: 10px;
+  font-size: 17px;
+  padding: 0 8px;
+  margin: 2px 2px;
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#workspaces button:hover {
+  color: @fg;
+  background-color: @surface-alt;
+}
+
+/* Active workspace expands into a gradient pill */
+#workspaces button.active {
+  color: @bg;
+  background: linear-gradient(135deg, @blue, @purple);
+  min-width: 28px;
+  padding: 0 12px;
+}
+
+#workspaces button.urgent {
+  color: @bg;
+  background-color: @red;
+}
+
+/* ── Hyprland Submap Indicator ───────────────────────────────────────────── */
+#submap {
+  color: @bg;
+  background: linear-gradient(135deg, @orange, @red);
+  border-color: @red;
+  padding: 0 14px;
+}
+
+/* ── Active Window Island ────────────────────────────────────────────────── */
+#window {
+  color: @fg;
+}
+
+/* Hide the window pill completely on empty workspaces */
+window#waybar.empty #window {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ── Media Player (MPRIS) Island ─────────────────────────────────────────── */
+#mpris {
+  color: @purple;
+  border-color: alpha(@purple, 0.45);
+}
+
+#mpris.paused {
+  color: @muted;
+  border-color: @border;
+}
+
+/* ── Clock Island (Center) ───────────────────────────────────────────────── */
+#clock {
+  color: @cyan;
+  padding: 0 16px;
+}
+
+/* ── Group Spacing ───────────────────────────────────────────────────────── */
+#cpu,
+#memory,
+#battery,
+#pulseaudio,
+#bluetooth,
+#network,
+#custom-drawer-icon,
+#idle_inhibitor,
+#power-profiles-daemon {
+  padding: 0 8px;
+}
+
+/* ── Hardware Island Colors ──────────────────────────────────────────────── */
+#cpu {
+  color: @blue;
+}
+
+#memory {
+  color: @purple;
+}
+
+#battery {
+  color: @green;
+}
+
+#battery.charging,
+#battery.plugged {
+  color: @cyan;
+}
+
+#battery.warning:not(.charging) {
+  color: @yellow;
+}
+
+#battery.critical:not(.charging) {
+  color: @red;
+  animation: blink 1s steps(2, start) infinite;
+}
+
+/* ── Connectivity & Audio Island Colors ──────────────────────────────────── */
+#pulseaudio {
+  color: @yellow;
+}
+
+#pulseaudio.muted {
+  color: @muted;
+}
+
+#bluetooth {
+  color: @blue;
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
+  color: @muted;
+}
+
+#network {
+  color: @green;
+}
+
+#network.disconnected {
+  color: @red;
+}
+
+/* ── Utilities Drawer Colors ─────────────────────────────────────────────── */
+#custom-drawer-icon {
+  color: @muted;
+  font-size: 17px;
+  padding: 0 4px;
+}
+
+#idle_inhibitor {
+  color: @muted;
+  font-size: 17px;
+}
+
+#idle_inhibitor.activated {
+  color: @orange;
+}
+
+#power-profiles-daemon {
+  font-size: 17px;
+}
+
+#power-profiles-daemon.performance {
+  color: @red;
+}
+
+#power-profiles-daemon.balanced {
+  color: @blue;
+}
+
+#power-profiles-daemon.power-saver {
+  color: @green;
+}
+
+/* ── System Tray Island ──────────────────────────────────────────────────── */
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+}
+
+/* ── Tooltips & Context Menus ────────────────────────────────────────────── */
+tooltip {
+  background-color: alpha(@bg, 0.96);
+  border: 1px solid @blue;
+  border-radius: 12px;
+  color: @fg;
+}
+
+tooltip label {
+  padding: 6px;
+}
+
+menu {
+  background-color: @bg;
+  border: 1px solid @border;
+  border-radius: 10px;
+  color: @fg;
+}
+
+menuitem:hover {
+  background-color: @surface-alt;
+  color: @blue;
+}
+
+/* ── Keyframes ───────────────────────────────────────────────────────────── */
+@keyframes blink {
+  to {
+    color: @bg;
+    background-color: @red;
+    border-radius: 8px;
+  }
+}
