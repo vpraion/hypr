@@ -1,196 +1,200 @@
-/* ============================================================================
- * Waybar Stylesheet — Floating Islands + Drawers (Tokyo Night)
- * Docs: https://github.com/Alexays/Waybar/wiki/Styling
- * ============================================================================ */
+/* Floating Glass Islands (Tokyo Night × Hyprland) */
 
-/* ── Tokyo Night Color Palette ─────────────────────────────────────────────
- * Edit these variables to re-theme the entire bar in one place.
- * -------------------------------------------------------------------------- */
-@define-color bg          #1a1b26; /* Deep night background */
-@define-color surface     #24283b; /* Floating pill background */
-@define-color surface-alt #2f3549; /* Hover / subtle highlight */
-@define-color border      #414868; /* Pill outline */
-@define-color fg          #c0caf5; /* Primary text */
-@define-color muted       #565f89; /* Inactive / secondary text */
+@define-color bg          #16161e;
+@define-color surface     #1f2335;
+@define-color surface-alt #292e42;
+@define-color border      #3b4261;
+@define-color fg          #c0caf5;
+@define-color fg-dim      #a9b1d6;
+@define-color muted       #565f89;
 
 @define-color blue        #7aa2f7;
 @define-color cyan        #7dcfff;
+@define-color hypr-cyan   #33ccff;
 @define-color purple      #bb9af7;
 @define-color green       #9ece6a;
+@define-color teal        #73daca;
 @define-color yellow      #e0af68;
 @define-color orange      #ff9e64;
 @define-color red         #f7768e;
 
-/* ── Global Reset & Font ─────────────────────────────────────────────────── */
-/* JetBrains Mono for crisp text + Nerd Font Propo for full-size icons */
 * {
-  font-family: "JetBrains Mono", "MesloLGL Nerd Font Propo", "FantasqueSansM Nerd Font Propo", sans-serif;
-  font-size: 14px;
+  font-family: "JetBrains Mono", "FantasqueSansM Nerd Font", sans-serif;
+  font-size: 18px;
   font-weight: 600;
   min-height: 0;
 }
 
-/* Transparent outer bar so only the floating islands are visible */
 window#waybar {
   background-color: transparent;
   color: @fg;
 }
 
-/* ── Shared Floating Island Styling ──────────────────────────────────────── */
+/* Transparent Containers (only active workspace has a pill) */
 #workspaces,
-#submap,
-#window,
-#mpris,
-#clock,
 #hardware,
-#connectivity,
+#clock,
+#bluetooth,
+#pulseaudio,
 #utilities,
 #tray {
-  background-color: alpha(@surface, 0.92);
-  border: 1px solid @border;
-  border-radius: 14px;
-  padding: 2px 12px;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  background-color: transparent;
+  border: none;
+  border-radius: 12px;
+  padding: 4px 12px;
+  box-shadow: none;
 }
 
-/* Subtle border glow on hover */
-#window:hover,
-#mpris:hover,
-#clock:hover,
-#hardware:hover,
-#connectivity:hover,
-#utilities:hover,
-#tray:hover {
-  border-color: alpha(@blue, 0.75);
-}
-
-/* ── Workspaces Island ───────────────────────────────────────────────────── */
+/* Workspaces Island */
 #workspaces {
-  padding: 0 6px;
+  padding: 2px 8px;
 }
 
 #workspaces button {
   color: @muted;
   background-color: transparent;
-  border-radius: 10px;
-  font-size: 17px;
-  padding: 0 8px;
+  border-radius: 8px;
+  min-width: 28px;
+  padding: 2px 10px;
   margin: 2px 2px;
-  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: all 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#workspaces button.empty {
+  color: alpha(@muted, 0.55);
 }
 
 #workspaces button:hover {
   color: @fg;
-  background-color: @surface-alt;
+  background-color: alpha(@surface-alt, 0.9);
 }
 
-/* Active workspace expands into a gradient pill */
 #workspaces button.active {
   color: @bg;
-  background: linear-gradient(135deg, @blue, @purple);
-  min-width: 28px;
-  padding: 0 12px;
+  font-weight: 800;
+  background: linear-gradient(135deg, @hypr-cyan, @blue);
+  min-width: 40px;
+  padding: 2px 14px;
+  box-shadow: 0 0 10px alpha(@hypr-cyan, 0.35);
 }
 
 #workspaces button.urgent {
   color: @bg;
   background-color: @red;
+  box-shadow: 0 0 10px alpha(@red, 0.45);
 }
 
-/* ── Hyprland Submap Indicator ───────────────────────────────────────────── */
-#submap {
-  color: @bg;
-  background: linear-gradient(135deg, @orange, @red);
-  border-color: @red;
-  padding: 0 14px;
-}
-
-/* ── Active Window Island ────────────────────────────────────────────────── */
-#window {
+/* Center Islands: Media · Clock · Window */
+#clock {
   color: @fg;
+  padding: 4px 18px;
 }
 
-/* Hide the window pill completely on empty workspaces */
-window#waybar.empty #window {
+/* Symmetric fixed-width slots keep #clock centered regardless of title/song length */
+#custom-media,
+#window {
+  min-width: 540px;
+  padding: 4px 16px;
   background-color: transparent;
   border: none;
   box-shadow: none;
-  padding: 0;
-  margin: 0;
 }
 
-/* ── Media Player (MPRIS) Island ─────────────────────────────────────────── */
-#mpris {
+#custom-media {
   color: @purple;
-  border-color: alpha(@purple, 0.45);
 }
 
-#mpris.paused {
-  color: @muted;
-  border-color: @border;
+#window {
+  color: @fg-dim;
 }
 
-/* ── Clock Island (Center) ───────────────────────────────────────────────── */
-#clock {
-  color: @cyan;
-  padding: 0 16px;
-}
-
-/* ── Group Spacing ───────────────────────────────────────────────────────── */
-#cpu,
-#memory,
-#battery,
-#pulseaudio,
+/* Hardware & Connectivity Item Pills */
+#custom-cpu,
+#custom-gpu,
+#custom-net-speed,
+#custom-storage,
 #bluetooth,
-#network,
+#pulseaudio,
 #custom-drawer-icon,
 #idle_inhibitor,
-#power-profiles-daemon {
-  padding: 0 8px;
+#power-profiles-daemon,
+#custom-notification,
+#custom-power,
+#custom-lock,
+#custom-suspend,
+#custom-logout,
+#custom-reboot,
+#network {
+  padding: 2px 10px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* ── Hardware Island Colors ──────────────────────────────────────────────── */
-#cpu {
+#custom-cpu:hover,
+#custom-gpu:hover,
+#custom-net-speed:hover,
+#custom-storage:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#idle_inhibitor:hover,
+#power-profiles-daemon:hover,
+#custom-notification:hover,
+#custom-power:hover,
+#custom-lock:hover,
+#custom-suspend:hover,
+#custom-logout:hover,
+#custom-reboot:hover,
+#network:hover {
+  background-color: alpha(@surface-alt, 0.85);
+}
+
+/* Monospace + fixed min-width prevents adjacent blocks from shifting as digits change */
+#custom-cpu,
+#custom-gpu,
+#custom-net-speed,
+#custom-storage {
+  font-family: "Noto Sans Mono", "FantasqueSansM Nerd Font", monospace;
+}
+
+#custom-cpu {
   color: @blue;
+  min-width: 295px;
 }
 
-#memory {
+#custom-gpu {
+  color: @orange;
+  min-width: 280px;
+}
+
+#custom-net-speed {
   color: @purple;
+  min-width: 175px;
 }
 
-#battery {
-  color: @green;
-}
-
-#battery.charging,
-#battery.plugged {
-  color: @cyan;
-}
-
-#battery.warning:not(.charging) {
-  color: @yellow;
-}
-
-#battery.critical:not(.charging) {
+#custom-net-speed.disconnected {
   color: @red;
-  animation: blink 1s steps(2, start) infinite;
 }
 
-/* ── Connectivity & Audio Island Colors ──────────────────────────────────── */
+#custom-storage {
+  color: @teal;
+  min-width: 175px;
+}
+
+#bluetooth {
+  color: @blue;
+  padding: 4px 12px;
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
+  color: @muted;
+}
+
 #pulseaudio {
   color: @yellow;
 }
 
 #pulseaudio.muted {
-  color: @muted;
-}
-
-#bluetooth {
-  color: @blue;
-}
-
-#bluetooth.disabled,
-#bluetooth.off {
   color: @muted;
 }
 
@@ -200,26 +204,28 @@ window#waybar.empty #window {
 
 #network.disconnected {
   color: @red;
+  background-color: alpha(@red, 0.14);
 }
 
-/* ── Utilities Drawer Colors ─────────────────────────────────────────────── */
+/* Utilities Drawer */
 #custom-drawer-icon {
-  color: @muted;
-  font-size: 17px;
-  padding: 0 4px;
+  color: @fg-dim;
+  font-size: 20px;
+  padding: 2px 8px;
 }
 
 #idle_inhibitor {
   color: @muted;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 #idle_inhibitor.activated {
   color: @orange;
+  background-color: alpha(@orange, 0.15);
 }
 
 #power-profiles-daemon {
-  font-size: 17px;
+  font-size: 20px;
 }
 
 #power-profiles-daemon.performance {
@@ -234,7 +240,42 @@ window#waybar.empty #window {
   color: @green;
 }
 
-/* ── System Tray Island ──────────────────────────────────────────────────── */
+#custom-notification {
+  color: @fg-dim;
+  font-size: 20px;
+  padding: 4px 12px;
+}
+
+#custom-power {
+  color: @red;
+  font-size: 20px;
+  padding: 4px 12px;
+}
+
+#custom-lock,
+#custom-suspend,
+#custom-logout,
+#custom-reboot {
+  font-size: 20px;
+}
+
+#custom-lock {
+  color: @blue;
+}
+
+#custom-suspend {
+  color: @purple;
+}
+
+#custom-logout {
+  color: @yellow;
+}
+
+#custom-reboot {
+  color: @orange;
+}
+
+/* System Tray Island */
 #tray > .passive {
   -gtk-icon-effect: dim;
 }
@@ -243,35 +284,15 @@ window#waybar.empty #window {
   -gtk-icon-effect: highlight;
 }
 
-/* ── Tooltips & Context Menus ────────────────────────────────────────────── */
+/* Tooltips */
 tooltip {
   background-color: alpha(@bg, 0.96);
-  border: 1px solid @blue;
+  border: 1px solid alpha(@hypr-cyan, 0.75);
   border-radius: 12px;
   color: @fg;
+  box-shadow: 0 6px 18px alpha(#000000, 0.45);
 }
 
 tooltip label {
-  padding: 6px;
-}
-
-menu {
-  background-color: @bg;
-  border: 1px solid @border;
-  border-radius: 10px;
-  color: @fg;
-}
-
-menuitem:hover {
-  background-color: @surface-alt;
-  color: @blue;
-}
-
-/* ── Keyframes ───────────────────────────────────────────────────────────── */
-@keyframes blink {
-  to {
-    color: @bg;
-    background-color: @red;
-    border-radius: 8px;
-  }
+  padding: 8px 10px;
 }

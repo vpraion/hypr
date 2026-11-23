@@ -1,129 +1,90 @@
-// ============================================================================
-// Waybar Configuration — Floating Islands + Drawers (Tokyo Night)
-// Waybar v0.16+ | Docs: https://github.com/Alexays/Waybar/wiki/Configuration
-// ============================================================================
+// Minimal Waybar configuration for Hyprland
 {
-  // ── Bar Layout & Positioning ──────────────────────────────────────────────
-  "layer": "top",                    // Render above normal windows
-  "position": "top",                 // "top", "bottom", "left", or "right"
-  // Omit "height" so the bar hugs the pills tightly without extra vertical slack
-  "margin-top": 8,                   // Top gap from screen edge
-  "margin-bottom": 0,                // 0 so Hyprland's gaps_out alone controls the gap to windows
-  "margin-left": 12,                 // Left gap from screen edge
-  "margin-right": 12,                // Right gap from screen edge
-  "spacing": 8,                      // Gap between separate floating islands
-  "reload_style_on_change": true,    // Live-reload style.css on save
+  "layer": "top",
+  "position": "top",
+  "height": 20,
+  "spacing": 8,
+  "margin-top": 5,
+  // Negative bottom margin reduces the exclusive zone so tiled windows sit closer to the bar
+  "margin-bottom": -15,
+  "margin-left": 20,
+  "margin-right": 20,
+  "reload_style_on_change": true,
 
-  // ── Module Placement ──────────────────────────────────────────────────────
-  "modules-left": [],
-  "modules-center": [
+  "modules-left": [
     "hyprland/workspaces",
-    "hyprland/submap",               // Only appears when a Hyprland submap (e.g. resize) is active
-    "hyprland/window",
-    "mpris"
+    "group/hardware"
+  ],
+  "modules-center": [
+    "custom/media",
+    "clock",
+    "hyprland/window"
   ],
   "modules-right": [
-    "group/hardware",
-    "group/connectivity",
-    "group/utilities",               // Hoverable drawer: caffeine + power profile
+    "bluetooth",
+    "pulseaudio",
+    "group/utilities",
     "tray",
-    "clock"                          // Rightmost position
+    "custom/notification",
+    "group/power"
   ],
 
-  // ── Module Groups ─────────────────────────────────────────────────────────
   "group/hardware": {
-    "orientation": "inherit",
+    "orientation": "horizontal",
     "modules": [
-      "cpu",
-      "memory",
-      "battery"
+      "custom/cpu",
+      "custom/gpu",
+      "custom/net-speed",
+      "custom/storage"
     ]
   },
 
-  "group/connectivity": {
-    "orientation": "inherit",
-    "modules": [
-      "pulseaudio",
-      "bluetooth",
-      "network"
-    ]
+  "custom/cpu": {
+    "exec": "~/.config/waybar/scripts/cpu.py",
+    "return-type": "json",
+    "interval": 2,
+    "on-click": "kitty -e btop"
   },
 
-  // Expandable drawer: shows the trigger icon, reveals tools smoothly on hover
-  "group/utilities": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 300,
-      "children-class": "utility-child",
-      "transition-left-to-right": false
-    },
-    "modules": [
-      "custom/drawer-icon",          // Always-visible leader icon
-      "idle_inhibitor",              // Caffeine toggle (prevent sleep/idle)
-      "power-profiles-daemon"        // Cycle power-saver / balanced / performance
-    ]
+  "custom/gpu": {
+    "exec": "~/.config/waybar/scripts/gpu.py",
+    "return-type": "json",
+    "interval": 2,
+    "on-click": "kitty -e nvtop"
   },
 
-  // ── Left Modules ──────────────────────────────────────────────────────────
+  "custom/net-speed": {
+    "exec": "~/.config/waybar/scripts/net-speed.py",
+    "return-type": "json",
+    "interval": 2,
+    "on-click": "kitty -e nmtui"
+  },
+
+  "custom/storage": {
+    "exec": "~/.config/waybar/scripts/storage.py",
+    "return-type": "json",
+    "interval": 2,
+    "on-click": "kitty -e ncdu ~"
+  },
+
   "hyprland/workspaces": {
-    "format": "{icon}",
+    "format": "{id}",
     "on-click": "activate",
-    "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1",
-    "sort-by-number": true,
-    "format-icons": {
-      "active": "󰮯",                 // Pacman-style active workspace indicator
-      "urgent": "",
-      "default": "󰊠"
-    }
-    // Uncomment to keep workspaces 1-5 always visible:
-    // "persistent-workspaces": {
-    //   "*": 5
-    // }
+    "sort-by-number": true
   },
 
-  "hyprland/submap": {
-    "format": "󰌌  {}",
-    "max-length": 18,
-    "tooltip": false
+  "custom/media": {
+    "exec": "~/.config/waybar/scripts/media.py",
+    "return-type": "json",
+    "interval": 2,
+    // Right-aligned inside its fixed 540px slot so text expands leftward from the clock
+    "align": 1,
+    "on-click": "playerctl play-pause"
   },
 
-  "hyprland/window": {
-    "format": "{title}",
-    "max-length": 40,
-    "separate-outputs": true,
-    "rewrite": {
-      "(.*) — Mozilla Firefox": "󰈹  $1",
-      "(.*) - Visual Studio Code": "󰨞  $1",
-      "(.*) - kitty": "󰄛  $1",
-      "(.*) - Ghostty": "󰊠  $1"
-    }
-  },
-
-  "mpris": {
-    // Automatically hides when no media player is active
-    "format": "{player_icon}  {dynamic}",
-    "format-paused": "{status_icon}  <i>{dynamic}</i>",
-    "max-length": 36,
-    "dynamic-order": ["title", "artist"],
-    "player-icons": {
-      "default": "󰎈",
-      "spotify": "󰓇",
-      "firefox": "󰈹",
-      "chromium": ""
-    },
-    "status-icons": {
-      "paused": "󰏤"
-    },
-    "on-click": "playerctl play-pause",
-    "on-scroll-up": "playerctl next",
-    "on-scroll-down": "playerctl previous"
-  },
-
-  // ── Center Module ─────────────────────────────────────────────────────────
   "clock": {
-    "format": "󰥔  {:%H:%M   󰃭  %a %d %b}",
-    "format-alt": "󰥔  {:%H:%M:%S   󰃭  %Y-%m-%d}", // Click to toggle seconds & ISO date
+    "format": "{:%a %d %b  %H:%M}",
+    "format-alt": "{:%a %d %b  %H:%M:%S}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
     "calendar": {
       "mode": "month",
@@ -139,88 +100,81 @@
     }
   },
 
-  // ── Right Modules: Hardware Group ─────────────────────────────────────────
-  "cpu": {
-    "interval": 2,
-    "format": "  {usage}%",
-    "tooltip": true,
-    "on-click": "kitty -e btop"     // Opens btop on click
-  },
-
-  "memory": {
-    "interval": 5,
-    "format": "  {percentage}%",
-    "tooltip-format": "RAM: {used:0.1f} GiB / {total:0.1f} GiB ({percentage}%)\nSwap: {swapUsed:0.1f} GiB / {swapTotal:0.1f} GiB",
-    "on-click": "kitty -e btop"
-  },
-
-  "battery": {
-    "interval": 10,
-    "states": {
-      "good": 80,
-      "warning": 30,
-      "critical": 15
-    },
-    "format": "{icon}  {capacity}%",
-    "format-charging": "󰂄  {capacity}%",
-    "format-plugged": "  {capacity}%",
-    "format-alt": "{icon}  {time}",   // Click to toggle remaining time
-    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-    "tooltip-format": "{timeTo}\nPower draw: {power:.1f}W"
-  },
-
-  // ── Right Modules: Connectivity & Audio Group ─────────────────────────────
-  "pulseaudio": {
-    "scroll-step": 5,
-    "format": "{icon}  {volume}%",
-    "format-bluetooth": "󰂯 {icon}  {volume}%",
-    "format-muted": "󰝟  Muted",
-    "format-icons": {
-      "headphone": "󰋋",
-      "hands-free": "󰋎",
-      "headset": "󰋎",
-      "default": ["󰕿", "󰖀", "󰕾"]
-    },
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-    "on-click-right": "pavucontrol"
+  "hyprland/window": {
+    // Prefix with {class}:: so rewrite rules can match apps/games regardless of title
+    "format": "{class}::{title}",
+    "max-length": 38,
+    // Left-aligned inside its fixed 540px slot so text expands rightward from the clock
+    "align": 0,
+    "separate-outputs": true,
+    "rewrite": {
+      "(?:[Ss]team|steam_app_.*)::(.*)": "  $1",
+      "[Ss]idra::(.*)": "󰎇  $1",
+      "[Kk]itty.*::(.*)": "󰄛  $1",
+      "(?:com\\.mitchellh\\.)?[Gg]hostty::(.*)": "󰊠  $1",
+      "firefox::(.*) — Mozilla Firefox": "󰈹  $1",
+      "firefox::(.*)": "󰈹  $1",
+      "(?:google-chrome|chromium)::(.*) - (?:Google Chrome|Chromium)": "  $1",
+      "(?:google-chrome|chromium)::(.*)": "  $1",
+      "(?:code|Code|cursor|Cursor)::(.*) - (?:Visual Studio Code|Cursor)": "󰨞  $1",
+      "(?:code|Code|cursor|Cursor)::(.*)": "󰨞  $1",
+      "org\\.kde\\.dolphin::(.*) — Dolphin": "󰉋  $1",
+      "org\\.kde\\.dolphin::(.*)": "󰉋  $1",
+      "(?:[Dd]iscord|[Vv]esktop)::(.*)": "  $1",
+      "[Ss]potify::(.*)": "󰓇  $1",
+      "^::$": "",
+      // Fallback: strip {class}:: for any unmatched app
+      ".*::(.*)": "$1"
+    }
   },
 
   "bluetooth": {
     "format": "󰂯",
-    "format-connected": "󰂱  {device_alias}",
-    "format-connected-battery": "󰂱  {device_alias} ({device_battery_percentage}%)",
-    "format-disabled": "󰂲",
+    "format-connected": "󰂱",
     "format-off": "󰂲",
-    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\nLeft-click: Toggle power\nRight-click: bluetoothctl",
-    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-    "on-click": "sh -c 'bluetoothctl show | grep -q \"Powered: yes\" && bluetoothctl power off || bluetoothctl power on'",
-    "on-click-right": "kitty -e bluetoothctl"
+    "format-disabled": "󰂲",
+    "tooltip-format": "{controller_alias}\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias} ({device_battery_percentage}%)",
+    // Uses Hyprland's Lua dispatcher (hl.dsp.exec_cmd) to toggle a floating top-right popup
+    "on-click": "pkill -x blueman-manager || hyprctl -q dispatch 'hl.dsp.exec_cmd(\"[float;size 600 450;move (monitor_w-window_w-20) 65] blueman-manager\")' >/dev/null 2>&1",
+    "on-click-right": "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
   },
 
-  "network": {
-    "interval": 5,
-    "format-wifi": "󰖩  {essid}",
-    "format-ethernet": "󰈀  {ifname}",
-    "format-disconnected": "󰖪  Offline",
-    "max-length": 20,
-    "tooltip-format-wifi": "SSID: {essid} ({signalStrength}%)\nIP: {ipaddr}/{cidr}\nFreq: {frequency} GHz",
-    "tooltip-format-ethernet": "Interface: {ifname}\nIP: {ipaddr}/{cidr}",
-    "tooltip-format-disconnected": "Disconnected",
-    "on-click": "kitty -e nmtui"     // Opens nmtui in kitty
+  "pulseaudio": {
+    "format": "  {volume}%",
+    "format-muted": "  muted",
+    "on-click": "pkill -x pavucontrol || hyprctl dispatch 'hl.dsp.exec_cmd(\"[float;size 600 450;move (monitor_w-window_w-20) 65] pavucontrol\")'",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "scroll-step": 5,
+    "tooltip": false
   },
 
-  // ── Right Modules: Utilities Drawer ───────────────────────────────────────
+  "group/utilities": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 250,
+      "children-class": "utility-child",
+      // Expand drawer items to the left of the gear icon
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/drawer-icon",
+      "idle_inhibitor",
+      "power-profiles-daemon"
+    ]
+  },
+
   "custom/drawer-icon": {
-    "format": "󰍜",
+    "format": "󰒓",
     "tooltip-format": "Hover to reveal utilities"
   },
 
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
-      "activated": "󰅶",              // Caffeine ON (stay awake)
-      "deactivated": "󰾪"             // Caffeine OFF (normal idle)
+      "activated": "󰅶",
+      "deactivated": "󰾪"
     },
     "tooltip-format-activated": "Idle inhibitor: ON (screen stays awake)",
     "tooltip-format-deactivated": "Idle inhibitor: OFF"
@@ -238,9 +192,75 @@
     }
   },
 
-  // ── Right Modules: System Tray ────────────────────────────────────────────
   "tray": {
-    "icon-size": 20,
-    "spacing": 8
+    "icon-size": 22,
+    "spacing": 12
+  },
+
+  "custom/notification": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "<span foreground='#f7768e'><sup></sup></span>",
+      "none": "",
+      "dnd-notification": "<span foreground='#f7768e'><sup></sup></span>",
+      "dnd-none": "",
+      "inhibited-notification": "<span foreground='#f7768e'><sup></sup></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "<span foreground='#f7768e'><sup></sup></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  },
+
+  "group/power": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 250,
+      "children-class": "power-child",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/power",
+      "custom/lock",
+      "custom/suspend",
+      "custom/logout",
+      "custom/reboot"
+    ]
+  },
+
+  "custom/power": {
+    "format": "⏻",
+    "tooltip-format": "Shutdown",
+    "on-click": "systemctl poweroff"
+  },
+
+  "custom/lock": {
+    "format": "󰌾",
+    "tooltip-format": "Lock",
+    "on-click": "command -v hyprlock >/dev/null && hyprlock || loginctl lock-session"
+  },
+
+  "custom/suspend": {
+    "format": "󰤄",
+    "tooltip-format": "Suspend",
+    "on-click": "systemctl suspend"
+  },
+
+  "custom/logout": {
+    "format": "󰍃",
+    "tooltip-format": "Logout",
+    "on-click": "hyprctl -q dispatch 'hl.dsp.exit()'"
+  },
+
+  "custom/reboot": {
+    "format": "󰜉",
+    "tooltip-format": "Reboot",
+    "on-click": "systemctl reboot"
   }
 }
