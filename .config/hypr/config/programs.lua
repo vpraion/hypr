@@ -1,7 +1,7 @@
 -- Set programs that you use
 return {
     terminal    = "kitty",
-    fileManagerTUI = "kitty -e spf",
+    fileManagerTUI = "kitty -e yazi",
     fileManagerGUI = "dolphin",
     menu        = "~/.config/rofi/launchers/type-2/launcher.sh",
     hyprpaper   = "hyprpaper",
