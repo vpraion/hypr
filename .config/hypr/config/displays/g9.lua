@@ -6,6 +6,5 @@ return {
     bitdepth = 10,
     cm       = "hdredid",
     sdrbrightness = 13,
-    sdrsaturation = 1.25
-    -- vrr = 2 
+    sdrsaturation = 1.25,
 }
