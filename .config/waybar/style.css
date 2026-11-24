@@ -113,6 +113,7 @@ window#waybar {
 #custom-gpu,
 #custom-net-speed,
 #custom-storage,
+#language,
 #bluetooth,
 #pulseaudio,
 #custom-drawer-icon,
@@ -134,6 +135,7 @@ window#waybar {
 #custom-gpu:hover,
 #custom-net-speed:hover,
 #custom-storage:hover,
+#language:hover,
 #bluetooth:hover,
 #pulseaudio:hover,
 #idle_inhibitor:hover,
@@ -196,6 +198,34 @@ window#waybar {
 
 #pulseaudio.muted {
   color: @muted;
+}
+
+#pulseaudio.source {
+  color: @teal;
+}
+
+#pulseaudio.source.source-muted {
+  color: @muted;
+}
+
+#language {
+  color: @cyan;
+}
+
+#keyboard-state {
+  padding: 0;
+}
+
+#keyboard-state label.capslock {
+  color: @muted;
+  padding: 2px 10px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+#keyboard-state label.capslock.locked {
+  color: @red;
+  background-color: alpha(@red, 0.15);
 }
 
 #network {
@@ -273,6 +303,15 @@ window#waybar {
 
 #custom-reboot {
   color: @orange;
+}
+
+#custom-power.confirming,
+#custom-suspend.confirming,
+#custom-logout.confirming,
+#custom-reboot.confirming {
+  color: @bg;
+  background-color: @red;
+  box-shadow: 0 0 10px alpha(@red, 0.5);
 }
 
 /* System Tray Island */

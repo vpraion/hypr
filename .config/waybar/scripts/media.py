@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Waybar module: Current media (artist - title) with fixed-slot fallback."""
 
+import html
 import json
 import subprocess
 
@@ -47,8 +48,8 @@ def main() -> None:
     label = f"{artist} - {title}" if artist and title else (title or artist)
     display = title or artist
     icon = "󰏤" if status.lower() == "paused" else "󰎇"
-    text = f"{icon}  {truncate(display)}"
-    tooltip = f"Source: {player}\n{label}"
+    text = f"{icon}  {html.escape(truncate(display), quote=False)}"
+    tooltip = html.escape(f"Source: {player}\n{label}", quote=False)
     print(json.dumps({"text": text, "tooltip": tooltip}))
 
 

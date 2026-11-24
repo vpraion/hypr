@@ -21,8 +21,11 @@
     "hyprland/window"
   ],
   "modules-right": [
+    "hyprland/language",
+    "keyboard-state",
     "bluetooth",
     "pulseaudio",
+    "pulseaudio#source",
     "group/utilities",
     "tray",
     "custom/notification",
@@ -57,14 +60,18 @@
     "exec": "~/.config/waybar/scripts/net-speed.py",
     "return-type": "json",
     "interval": 2,
-    "on-click": "kitty -e nmtui"
+    "signal": 11,
+    "on-click": "kitty -e nmtui",
+    "on-click-right": "~/.config/waybar/scripts/net-speed.py cycle"
   },
 
   "custom/storage": {
     "exec": "~/.config/waybar/scripts/storage.py",
     "return-type": "json",
     "interval": 2,
-    "on-click": "kitty -e ncdu ~"
+    "signal": 12,
+    "on-click": "kitty -e ncdu ~",
+    "on-click-right": "~/.config/waybar/scripts/storage.py cycle"
   },
 
   "hyprland/workspaces": {
@@ -128,6 +135,23 @@
     }
   },
 
+  "hyprland/language": {
+    "format": "󰌌  {short}",
+    "tooltip-format": "{long}\nClick to switch layout",
+    "on-click": "hyprctl switchxkblayout all next"
+  },
+
+  "keyboard-state": {
+    "capslock": true,
+    "format": "{icon}",
+    "format-icons": {
+      "capslock": {
+        "locked": "󰪛  CAPS",
+        "unlocked": "󰪛"
+      }
+    }
+  },
+
   "bluetooth": {
     "format": "󰂯",
     "format-connected": "󰂱",
@@ -146,6 +170,18 @@
     "format-muted": "  muted",
     "on-click": "pkill -x pavucontrol || hyprctl dispatch 'hl.dsp.exec_cmd(\"[float;size 600 450;move (monitor_w-window_w-20) 65] pavucontrol\")'",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "scroll-step": 5,
+    "tooltip": false
+  },
+
+  "pulseaudio#source": {
+    "format": "{format_source}",
+    "format-muted": "{format_source}",
+    "format-source": "  {volume}%",
+    "format-source-muted": "  muted",
+    "target": "source",
+    "on-click": "pkill -x pavucontrol || hyprctl dispatch 'hl.dsp.exec_cmd(\"[float;size 600 450;move (monitor_w-window_w-20) 65] pavucontrol\")'",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     "scroll-step": 5,
     "tooltip": false
   },
@@ -235,9 +271,11 @@
   },
 
   "custom/power": {
-    "format": "⏻",
-    "tooltip-format": "Shutdown",
-    "on-click": "systemctl poweroff"
+    "return-type": "json",
+    "exec": "/home/vini/.config/waybar/scripts/power-action.py status power",
+    "signal": 10,
+    "on-click": "/home/vini/.config/waybar/scripts/power-action.py click power",
+    "on-click-right": "/home/vini/.config/waybar/scripts/power-action.py cancel"
   },
 
   "custom/lock": {
@@ -247,20 +285,26 @@
   },
 
   "custom/suspend": {
-    "format": "󰤄",
-    "tooltip-format": "Suspend",
-    "on-click": "systemctl suspend"
+    "return-type": "json",
+    "exec": "/home/vini/.config/waybar/scripts/power-action.py status suspend",
+    "signal": 10,
+    "on-click": "/home/vini/.config/waybar/scripts/power-action.py click suspend",
+    "on-click-right": "/home/vini/.config/waybar/scripts/power-action.py cancel"
   },
 
   "custom/logout": {
-    "format": "󰍃",
-    "tooltip-format": "Logout",
-    "on-click": "hyprctl -q dispatch 'hl.dsp.exit()'"
+    "return-type": "json",
+    "exec": "/home/vini/.config/waybar/scripts/power-action.py status logout",
+    "signal": 10,
+    "on-click": "/home/vini/.config/waybar/scripts/power-action.py click logout",
+    "on-click-right": "/home/vini/.config/waybar/scripts/power-action.py cancel"
   },
 
   "custom/reboot": {
-    "format": "󰜉",
-    "tooltip-format": "Reboot",
-    "on-click": "systemctl reboot"
+    "return-type": "json",
+    "exec": "/home/vini/.config/waybar/scripts/power-action.py status reboot",
+    "signal": 10,
+    "on-click": "/home/vini/.config/waybar/scripts/power-action.py click reboot",
+    "on-click-right": "/home/vini/.config/waybar/scripts/power-action.py cancel"
   }
 }
