@@ -6,4 +6,5 @@ return {
     menu        = "~/.config/rofi/launchers/type-2/launcher.sh",
     hyprpaper   = "hyprpaper",
     waybar      = "waybar",
+    steam       = "steam",
 }
