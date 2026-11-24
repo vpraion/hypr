@@ -43,4 +43,9 @@ hl.config({
             vibrancy = 0.1696,
         },
     },
+
+    cursor = {
+        no_hardware_cursors = 1, -- avoid burnt cursor in HDR
+        enable_hyprcursor = false,
+    },
 })
