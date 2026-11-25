@@ -7,4 +7,5 @@ return {
     hyprpaper   = "hyprpaper",
     waybar      = "waybar",
     steam       = "steam",
+    musicPlayer = "sidra",
 }
