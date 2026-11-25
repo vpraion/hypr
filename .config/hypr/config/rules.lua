@@ -59,3 +59,13 @@ hl.window_rule({
     move  = "20 monitor_h-120",
     float = true,
 })
+
+-- Sidra music player
+hl.window_rule({
+    name  = "float-sidra",
+    match = { class = "^[Ss]idra$" },
+
+    float = true,
+    size  = "1300 800",
+    move  = "(cursor_x-(window_w*0.5)) (cursor_y-(window_h*0.5))",
+})
