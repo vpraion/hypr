@@ -83,7 +83,7 @@
   "custom/media": {
     "exec": "~/.config/waybar/scripts/media.py",
     "return-type": "json",
-    "interval": 2,
+    "restart-interval": 5,
     // Right-aligned inside its fixed 540px slot so text expands leftward from the clock
     "align": 1,
     "on-click": "playerctl play-pause"

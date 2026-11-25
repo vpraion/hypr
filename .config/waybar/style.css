@@ -104,6 +104,10 @@ window#waybar {
   color: @purple;
 }
 
+#custom-media.paused {
+  color: alpha(@purple, 0.7);
+}
+
 #window {
   color: @fg-dim;
 }
