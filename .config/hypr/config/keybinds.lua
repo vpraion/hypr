@@ -3,6 +3,7 @@
 local programs = require("config.programs")
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local secondMod = "ALT" -- Sets "Alt" key as second modifier
 
 hl.bind(mainMod .. " + BACKSPACE", hl.dsp.exec_cmd(programs.terminal))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
@@ -12,7 +13,7 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(programs.fileManagerTUI))
 hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(programs.fileManagerGUI))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(programs.menu)) -- rofi
+hl.bind(secondMod .. " + SPACE", hl.dsp.exec_cmd(programs.menu)) -- rofi
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 hl.bind("PRINT", hl.dsp.exec_cmd("hyprshot -m output -m active --clipboard-only"))
