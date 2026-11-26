@@ -45,7 +45,7 @@ hl.config({
     },
 
     cursor = {
-        no_hardware_cursors = 1, -- avoid burnt cursor in HDR
+        no_hardware_cursors = 0,
         enable_hyprcursor = false,
     },
 })

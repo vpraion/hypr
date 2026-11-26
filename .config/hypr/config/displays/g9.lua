@@ -5,6 +5,13 @@ return {
     scale    = "auto",
     bitdepth = 10,
     cm       = "hdredid",
-    sdrbrightness = 13,
-    sdrsaturation = 1.25,
+
+    sdrbrightness = 1,
+    sdrsaturation = 1.15,
+    sdr_min_luminance = 0.05,
+    sdr_max_luminance = 1000,
+
+    min_luminance = 0.05,
+    max_luminance = 1000,
+    max_avg_luminance = 600,
 }
