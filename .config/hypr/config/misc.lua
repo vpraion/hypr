@@ -1,6 +1,7 @@
 hl.config({
     render = {
       direct_scanout = 1,
+      non_shader_cm = 2,
     },
     misc = {
         force_default_wallpaper = -1,    -- Set to 0 or 1 to disable the anime mascot wallpapers
