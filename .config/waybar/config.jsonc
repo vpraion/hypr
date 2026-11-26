@@ -45,7 +45,7 @@
   "custom/cpu": {
     "exec": "~/.config/waybar/scripts/cpu.py",
     "return-type": "json",
-    "interval": 2,
+    "restart-interval": 5,
     "on-click": "kitty -e btop"
   },
 
